@@ -3,7 +3,7 @@
 case "$1" in
   smtp)
     cd /maildrop/smtp
-    java -jar smtp.jar "${@:2}"
+    java "${@:2}" -jar smtp.jar
     ;;
   web)
     cd /maildrop/web
