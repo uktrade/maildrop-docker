@@ -6,11 +6,12 @@ RUN apt update && \
     curl -L https://piccolo.link/sbt-1.1.5.tgz | tar xzf -
 COPY maildrop /maildrop
 RUN cd /maildrop/web && \
-    ./activator dist && \
-    unzip -d dist target/universal/web-2.0.zip
+    /sbt/bin/sbt universal:packageZipTarball && \
+    mkdir dist && \
+    tar xzvf target/universal/web-2.0.tgz -C dist --strip 1
 
 FROM openjdk:8-slim
-COPY --from=build --chown=daemon /maildrop/web/dist/web-2.0 /maildrop/web
+COPY --from=build --chown=daemon /maildrop/web/dist /maildrop/web
 USER daemon
 COPY startup.sh /startup.sh
 
