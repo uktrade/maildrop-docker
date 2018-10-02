@@ -14,4 +14,4 @@ COPY --from=build --chown=daemon /maildrop/smtp/target/scala-2.10/smtp-assembly-
 USER daemon
 COPY startup.sh /startup.sh
 
-ENTRYPOINT ["/startup.sh", "smtp", "@*"]
+ENTRYPOINT ["/startup.sh", "smtp", "$*"]
