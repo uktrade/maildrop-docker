@@ -1,0 +1,21 @@
+version: '3'
+services:
+  web:
+    image: quay.io/uktrade/maildrop-web:latest
+    ports:
+      - "80:9000"
+    links:
+      - redis
+    depends_on:
+      - smtp
+      - redis
+  smtp:
+    image: quay.io/uktrade/maildrop-smtp:latest
+    ports:
+      - "25:25000"
+    links:
+      - redis
+    depends_on:
+      - redis
+  redis:
+    image: redis:latest
