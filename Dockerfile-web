@@ -12,5 +12,4 @@ COPY --from=build --chown=daemon /maildrop/web/web-2.0 /maildrop/web
 USER daemon
 COPY startup.sh /startup.sh
 
-ENTRYPOINT ["/startup.sh"]
-CMD ["web", "$@"]
+ENTRYPOINT ["/startup.sh", "web"]
