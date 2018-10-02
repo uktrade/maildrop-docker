@@ -2,12 +2,11 @@ FROM openjdk:8-slim as build
 ARG maildrop_ver=master
 
 RUN apt update && \
-    apt install -y curl && \
+    apt install -y curl zip && \
     curl -L https://piccolo.link/sbt-1.1.5.tgz | tar xzf -
 COPY maildrop /maildrop
 RUN cd /maildrop/web && \
     ./activator dist && \
-    mkdir dist &&
     unzip -d dist target/universal/web-2.0.zip
 
 FROM openjdk:8-slim
