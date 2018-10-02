@@ -1,7 +1,7 @@
 FROM openjdk:8-slim as build
 
 ADD https://piccolo.link/sbt-1.2.3.tgz /tmp
-RUN tar xzvf /tmp/sbt-1.2.3.tgz -C /
+RUN tar -xzf /tmp/sbt-1.2.3.tgz -C /
 COPY maildrop /maildrop
 RUN cd /maildrop/web && \
     /sbt/bin/sbt universal:packageZipTarball && \
