@@ -1,17 +1,14 @@
 FROM openjdk:8-slim as build
-ARG maildrop_ver=master
 
-RUN apt update && \
-    apt install -y curl zip && \
-    curl -L https://piccolo.link/sbt-1.1.5.tgz | tar xzf -
+ADD https://piccolo.link/sbt-1.2.3.tgz /tmp
+RUN tar xzvf /tmp/sbt-1.2.3.tgz -C /
 COPY maildrop /maildrop
 RUN cd /maildrop/web && \
     /sbt/bin/sbt universal:packageZipTarball && \
-    mkdir dist && \
-    tar xzvf target/universal/web-2.0.tgz -C dist --strip 1
+    tar xzvf target/universal/web-2.0.tgz
 
 FROM openjdk:8-slim
-COPY --from=build --chown=daemon /maildrop/web/dist /maildrop/web
+COPY --from=build --chown=daemon /maildrop/web/web-2.0 /maildrop/web
 USER daemon
 COPY startup.sh /startup.sh
 

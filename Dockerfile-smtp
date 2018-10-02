@@ -1,16 +1,14 @@
 FROM openjdk:8-slim as build
-ARG maildrop_ver=master
 
-RUN apt update && \
-    apt install -y curl zip && \
-    curl -L https://piccolo.link/sbt-1.1.5.tgz | tar xzf -
+ADD https://piccolo.link/sbt-1.2.3.tgz /tmp
+RUN tar xzvf /tmp/sbt-1.2.3.tgz -C /
 COPY maildrop /maildrop
 RUN cd /maildrop/smtp && \
     echo 'addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.8")' > project/assembly.sbt && \
     /sbt/bin/sbt assembly
 
 FROM openjdk:8-slim
-COPY --from=build --chown=daemon /maildrop/smtp/target/scala-2.10/smtp-assembly-2.0.jar /maildrop/smtp.jar
+COPY --from=build --chown=daemon /maildrop/smtp/target/scala-2.10/smtp-assembly-2.0.jar /maildrop/smtp/smtp.jar
 USER daemon
 COPY startup.sh /startup.sh
 
