@@ -1,7 +1,10 @@
-version: '3'
+version: '3.3'
 services:
   web:
     image: quay.io/uktrade/maildrop-web:latest
+    volumes:
+      - ./conf:/etc/maildrop
+    command: ["-Dconfig.file=/etc/maildrop/web.conf"]
     ports:
       - "80:9000"
     links:
@@ -9,13 +12,25 @@ services:
     depends_on:
       - smtp
       - redis
+    deploy:
+      restart_policy:
+        condition: on-failure
   smtp:
     image: quay.io/uktrade/maildrop-smtp:latest
+    volumes:
+      - ./conf:/etc/maildrop
+    command: ["-Dconfig.file=/etc/maildrop/smtp.conf"]
     ports:
       - "25:25000"
     links:
       - redis
     depends_on:
       - redis
+    deploy:
+      restart_policy:
+        condition: on-failure
   redis:
     image: redis:latest
+    deploy:
+      restart_policy:
+        condition: on-failure
