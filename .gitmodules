@@ -1,0 +1,4 @@
+[submodule "maildrop"]
+	path = maildrop
+	url = https://github.com/m242/maildrop.git
+	branch = master
